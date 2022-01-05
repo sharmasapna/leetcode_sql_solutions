@@ -1,4 +1,4 @@
-# Solution to Leetcode Questions 
+# Solution to Leetcode SQL Questions 
 
 ### 511. Game Play Analysis I
 
