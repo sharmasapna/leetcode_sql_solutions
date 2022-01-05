@@ -137,8 +137,8 @@ LEFT JOIN  Activity b ON a.event_date +1 = b.event_date
                      AND a.player_id = b.player_id
 ```
 ### 1097. Game Play Analysis V
-Sirst we want to find the min date any player logged.  
-secondly we want to find who all logged on the next day so we join the previous result with Activity with a left join as we want all the day1 logged players.  
+First we want to find the min date any player logged.  
+Secondly we want to find who all logged on the next day so we join the previous result with Activity with a left join as we want all the day1 logged players.  
 Thirdly we count the install as total number of player_id logged on a day from the Activity tble
 ```
 
