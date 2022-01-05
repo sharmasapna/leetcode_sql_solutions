@@ -1,4 +1,7 @@
 # Solution to Leetcode SQL Questions
+
+I have learnt a lot from the youtube videos of [Fredric Muller](https://www.youtube.com/watch?v=DoGrxxa6kow&list=PLdrw9_aIADIPAMJW8I_S-S747oyiRtzpS) who has an amazing way of breaking down the problems which seem hard initially. Do watch his videos for more indepth analysis.
+
 ### 175. Combine Two Tables
 ```
 SELECT firstName,lastName,city,state from
