@@ -1,4 +1,98 @@
-# Solution to Leetcode SQL Questions 
+# Solution to Leetcode SQL Questions
+### 175. Combine Two Tables
+```
+SELECT firstName,lastName,city,state from
+Person
+LEFT JOIN
+Address ON Person.personId = Address.personId
+
+```
+
+### 176. Second Highest Salary
+```
+# Using subquery and dense_rank()
+SELECT IFNULL((SELECT  DISTINCT salary 
+FROM
+    (SELECT  salary, dense_rank() over( ORDER by salary DESC) AS rnk
+    FROM Employee) temp
+    WHERE rnk = 2) , NULL) AS  SecondHighestSalary 
+    
+    
+# using subquery
+SELECT 
+IFNULL(  (SELECT MAX(salary) FROM Employee WHERE salary <
+     (SELECT MAX(salary)
+    FROM Employee))  , NULL) as SecondHighestSalary
+```
+
+### 177. Nth Highest Salary
+```
+# METHOD: 1 using LIMIT AND OFFSET
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+SET N = N-1;
+  RETURN (
+        SELECT DISTINCT salary 
+      FROM Employee
+      ORDER BY salary DESC
+      LIMIT 1 OFFSET N
+      
+  );
+END
+#########
+#METHOD: 2 USING CORRELATED SUB QUERY
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN ( SELECT DISTINCT salary FROM Employee e1
+           WHERE N-1 = 
+                      (SELECT COUNT(DISTINCT(salary))
+                       FROM Employee e2
+                       WHERE e2.salary > e1.salary)
+      )   ;
+  END
+#######  
+#METHOD: 3 USING CTE AND DENSE_RANK
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN ( WITH nthHighestSalary AS
+                (SELECT salary,
+                 DENSE_RANK() OVER(ORDER BY salary DESC) AS    rnk FROM Employee)
+                SELECT DISTINCT salary FROM nthHighestSalary
+                WHERE rnk = N
+                 
+                )   ;
+END
+##########
+# METHOD: 4 using subquery and dense_rank()
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN (
+      SELECT DISTINCT salary 
+      FROM 
+            ( SELECT salary,
+              DENSE_RANK() OVER(ORDER BY salary DESC) AS rnk
+              FROM Employee
+            ) as a
+        WHERE rnk = N
+      
+  );
+END
+######
+#METHOD 5 USING TOP CLAUSE (although it doest run in MySQL but the logic is great!)
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN ( SELECT TOP 1 salary FROM 
+                      (SELECT DISTINCT TOP N salary
+                       FROM Employee
+                       ORDER BY salary DESC) A
+            ORDER BY salary
+      )   ;
+  END
+
+
+```
+
+
 
 ### 511. Game Play Analysis I
 
