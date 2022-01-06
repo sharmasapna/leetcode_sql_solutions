@@ -96,7 +96,14 @@ BEGIN
 
 
 ```
-
+### 180. Consecutive Numbers
+```
+SELECT DISTINCT l1.num AS ConsecutiveNums
+from 
+Logs l1
+JOIN Logs l2 on l2.id = l1.id +1 AND l1.num = l2.num
+JOIN Logs l3 on l3.id = l1.id +2 AND l1.num = l3.num
+```
 
 
 ### 511. Game Play Analysis I
@@ -165,4 +172,18 @@ FROM
     GROUP BY player_id) a
     LEFT JOIN Activity b ON a.player_id = b.player_id AND a.event_date +1 = b.event_date
     GROUP BY a.event_date
+```
+### 1501. Countries You Can Safely Invest In
+
+```
+WITH temp AS
+        (SELECT caller_id AS user,duration FROM Calls
+        UNION ALL
+        SELECT callee_id AS user, duration FROM Calls) 
+SELECT Country.name AS country
+FROM temp
+JOIN Person on Person.id = temp.user
+JOIN Country on left(Person.phone_number,3) = Country.country_code
+GROUP BY Country.name
+HAVING avg(duration) >  (SELECT AVG(duration) FROM Calls) 
 ```
