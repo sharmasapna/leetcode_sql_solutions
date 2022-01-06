@@ -2,6 +2,8 @@
 
 I have learnt a lot from the youtube videos of [Fredric Muller](https://www.youtube.com/watch?v=DoGrxxa6kow&list=PLdrw9_aIADIPAMJW8I_S-S747oyiRtzpS) who has an amazing way of breaking down the problems which seem hard initially. Do watch his videos for more indepth analysis.
 
+
+
 ### 175. Combine Two Tables
 ```
 SELECT firstName,lastName,city,state from
@@ -135,6 +137,18 @@ FROM
 (SELECT player_id,MIN(event_date) as event_date FROM Activity GROUP BY player_id) a
 LEFT JOIN  Activity b ON a.event_date +1 = b.event_date 
                      AND a.player_id = b.player_id
+```
+
+### 574. Winning Candidate
+```
+SELECT name
+FROM Candidate 
+WHERE ID = 
+            (SELECT candidateId
+            FROM Vote
+            GROUP BY candidateId
+            ORDER BY COUNT(candidateId) DESC
+            LIMIT 1)
 ```
 ### 1097. Game Play Analysis V
 First we want to find the min date any player logged.  
