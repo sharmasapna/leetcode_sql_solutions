@@ -157,6 +157,19 @@ WHERE ID =
             ORDER BY COUNT(candidateId) DESC
             LIMIT 1)
 ```
+
+### 602. Friend Requests II: Who Has the Most Friends
+
+```
+SELECT id,COUNT(id) AS num
+FROM
+    (SELECT requester_id as id FROM RequestAccepted
+    UNION ALL
+    SELECT accepter_id as id FROM RequestAccepted) temp
+GROUP BY id
+ORDER BY COUNT(id) DESC
+LIMIT 1
+```
 ### 1097. Game Play Analysis V
 First we want to find the min date any player logged.  
 Secondly we want to find who all logged on the next day so we join the previous result with Activity with a left join as we want all the day1 logged players.  
