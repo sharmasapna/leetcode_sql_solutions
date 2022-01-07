@@ -158,6 +158,24 @@ WHERE ID =
             LIMIT 1)
 ```
 
+### 578. Get Highest Answer Rate Question
+```
+SELECT question_id as survey_log
+FROM (
+    
+    (SELECT question_id,
+            SUM(CASE WHEN action = "answer"
+                     THEN 1 ELSE 0
+                 END ) AS num ,
+            SUM(CASE WHEN action = "show"
+                     THEN 1 ELSE 0
+                 END ) AS den 
+    FROM SurveyLog
+    GROUP BY question_id)) temp
+ORDER BY (num/den) DESC
+LIMIT 1
+```
+
 ### 602. Friend Requests II: Who Has the Most Friends
 
 ```
@@ -185,6 +203,18 @@ FROM
     GROUP BY player_id) a
     LEFT JOIN Activity b ON a.player_id = b.player_id AND a.event_date +1 = b.event_date
     GROUP BY a.event_date
+```
+### 1285. Find the Start and End Number of Continuous Ranges
+
+```
+SELECT MIN(log_id) AS start_id,
+       MAX(log_id) AS end_id
+FROM (
+        SELECT log_id,
+            ROW_NUMBER() OVER(ORDER BY log_id) AS rnk
+        FROM Logs
+        ) temp
+GROUP BY log_id -rnk
 ```
 ### 1501. Countries You Can Safely Invest In
 
