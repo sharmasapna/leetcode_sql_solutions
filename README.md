@@ -190,8 +190,9 @@ LIMIT 1
 ```
 ### 1068. Product Sales Analysis I
 ```
-SELECT
-product_name, year, price
+SELECT product_name, 
+       year, 
+       price
 FROM
 Sales
 JOIN
