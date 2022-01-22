@@ -96,15 +96,60 @@ BEGIN
 
 
 ```
+### 178. Rank Scores
+```
+SELECT score,
+       DENSE_RANK() OVER( ORDER BY  score DESC) AS 'rank'
+FROM Scores
+```
 ### 180. Consecutive Numbers
 ```
 SELECT DISTINCT l1.num AS ConsecutiveNums
-from 
+FROM 
 Logs l1
-JOIN Logs l2 on l2.id = l1.id +1 AND l1.num = l2.num
-JOIN Logs l3 on l3.id = l1.id +2 AND l1.num = l3.num
+JOIN Logs l2 ON l2.id = l1.id +1 AND l1.num = l2.num
+JOIN Logs l3 ON l3.id = l1.id +2 AND l1.num = l3.num
+```
+### 181. Employees Earning More Than Their Managers
+
+```
+SELECT e1.name as Employee
+FROM Employee e1
+JOIN Employee e2 ON e1.managerId = e2.id
+WHERE e1.salary > e2.salary
 ```
 
+### 184. Department Highest Salary
+
+```
+SELECT Department, Employee,salary
+FROM 
+    (SELECT Department.name AS `Department`, 
+            Employee.name AS `Employee`,  
+            Employee.salary, 
+            DENSE_RANK() OVER(PARTITION BY departmentId ORDER BY salary DESC) AS 'rank'
+     FROM Employee 
+     JOIN Department ON Employee.departmentId = Department.id) T
+WHERE T.rank = 1
+```
+### 185. Department Top Three Salaries
+
+```
+SELECT Department, 
+       Employee,
+       Salary
+       
+FROM 
+    (
+    SELECT Department.name AS Department, 
+           Employee.name AS Employee,
+           Salary,
+           DENSE_RANK() OVER (PARTITION BY Department.name ORDER BY Salary DESC) AS rnk
+    FROM Employee
+    LEFT JOIN Department ON Department.id = Employee.departmentId
+    ) temp
+WHERE rnk <4
+```
 
 ### 511. Game Play Analysis I
 
