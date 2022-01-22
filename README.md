@@ -118,6 +118,14 @@ FROM Employee e1
 JOIN Employee e2 ON e1.managerId = e2.id
 WHERE e1.salary > e2.salary
 ```
+### 183. Customers Who Never Order
+
+```
+SELECT name as Customers from 
+Customers
+LEFT JOIN Orders ON Customers.id = Orders.customerId
+WHERE Orders.id IS null
+```
 
 ### 184. Department Highest Salary
 
@@ -149,6 +157,24 @@ FROM
     LEFT JOIN Department ON Department.id = Employee.departmentId
     ) temp
 WHERE rnk <4
+```
+### 197. Rising Temperature
+
+```
+SELECT w2.id FROM weather w1
+JOIN weather w2 ON DATEDIFF(w1.recordDate, w2.recordDate) = -1
+WHERE w1.temperature < w2.temperature 
+```
+### 262. Trips and Users
+
+```SELECT 
+request_at AS Day,
+ROUND((SUM(IF(status != 'completed' ,1 ,0 ))/count(status)),2) AS 'Cancellation Rate'
+FROM Trips
+WHERE request_at BETWEEN "2013-10-01" AND '2013-10-03'
+  AND (client_id in (SELECT users_id FROM Users WHERE banned = 'No') )
+  AND (driver_id in (SELECT users_id FROM Users WHERE banned = 'No') )
+GROUP BY Day
 ```
 
 ### 511. Game Play Analysis I
@@ -233,6 +259,18 @@ GROUP BY id
 ORDER BY COUNT(id) DESC
 LIMIT 1
 ```
+### 608. Tree Node
+
+```
+SELECT id,
+       CASE
+         WHEN p_id IS NULL THEN 'Root'
+         WHEN (id IN (SELECT p_id FROM Tree )) THEN 'Inner'
+         ELSE 'Leaf'
+       END AS type
+FROM Tree
+ORDER BY id
+```
 ### 1068. Product Sales Analysis I
 ```
 SELECT product_name, 
@@ -263,6 +301,15 @@ FROM Sales
 WHERE (product_id, year) IN (SELECT product_id,MIN(year) FROM Sales
                              GROUP BY product_id)
 ```
+### 1075. Project Employees I
+
+```
+SELECT project_id, 
+       ROUND(AVG(experience_years),2) AS average_years
+FROM Project
+JOIN Employee USING (employee_id)
+GROUP BY project_id
+```
 
 ### 1097. Game Play Analysis V
 First we want to find the min date any player logged.  
@@ -291,6 +338,13 @@ FROM (
         FROM Logs
         ) temp
 GROUP BY log_id -rnk
+```
+### 1303. Find the Team Size
+
+```
+SELECT employee_id, 
+       COUNT(team_id) OVER(PARTITION BY team_id )AS team_size
+FROM Employee
 ```
 ### 1501. Countries You Can Safely Invest In
 
