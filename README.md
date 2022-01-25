@@ -310,6 +310,36 @@ FROM Project
 JOIN Employee USING (employee_id)
 GROUP BY project_id
 ```
+### 1082. Sales Analysis I
+
+```
+SELECT  seller_id
+FROM
+        (
+        SELECT seller_id,
+            DENSE_RANK() OVER( ORDER BY SUM(price) DESC) AS rnk
+        FROM Sales
+        GROUP BY seller_id
+        ) temp
+WHERE rnk = 1
+```
+### 1083. Sales Analysis II
+```
+WITH S8 AS (
+        SELECT DISTINCT buyer_id
+        FROM Sales 
+        JOIN Product USING (product_id)
+        WHERE product_name = 'S8'
+            ),
+    iPhone AS (
+        SELECT DISTINCT buyer_id
+        FROM Sales
+        JOIN Product USING (product_id)
+        WHERE product_name = 'iPhone'
+            )
+SELECT buyer_id  FROM S8
+WHERE buyer_id NOT IN (SELECT buyer_id FROM iPhone)
+```
 
 ### 1097. Game Play Analysis V
 First we want to find the min date any player logged.  
