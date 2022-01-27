@@ -216,6 +216,21 @@ FROM
 LEFT JOIN  Activity b ON a.event_date +1 = b.event_date 
                      AND a.player_id = b.player_id
 ```
+### 569. Median Employee Salary
+
+```
+SELECT id, 
+       company, 
+       salary 
+FROM    ( 
+        SELECT * , 
+        RANK() OVER (PARTITION BY company ORDER BY salary,id) AS rnk,
+        COUNT(*) OVER (PARTITION BY company) AS rc
+        FROM Employee
+        ) temp
+WHERE
+rnk IN (rc/2, (rc+1)/2, ( rc+2)/2)
+```
 
 ### 574. Winning Candidate
 ```
@@ -357,6 +372,36 @@ FROM
     LEFT JOIN Activity b ON a.player_id = b.player_id AND a.event_date +1 = b.event_date
     GROUP BY a.event_date
 ```
+
+### 1179. Reformat Department Table
+
+```
+SELECT id ,
+       sum(case when month = "Jan" then  revenue end) as Jan_Revenue,
+       sum(case when month = "Feb" then  revenue end) as Feb_Revenue,
+       sum(case when month = "Mar" then  revenue end) as Mar_Revenue,
+       sum(case when month = "Apr" then  revenue end) as Apr_Revenue,
+       sum(case when month = "May" then  revenue end) as May_Revenue,
+       sum(case when month = "Jun" then  revenue end) as Jun_Revenue,
+       sum(case when month = "Jul" then  revenue end) as Jul_Revenue,
+       sum(case when month = "Aug" then  revenue end) as Aug_Revenue,
+       sum(case when month = "Sep" then  revenue end) as Sep_Revenue,
+       sum(case when month = "Oct" then  revenue end) as Oct_Revenue,
+       sum(case when month = "Nov" then  revenue end) as Nov_Revenue,
+       sum(case when month = "Dec" then  revenue end) as Dec_Revenue
+FROM Department
+GROUP BY id
+```
+### 1251. Average Selling Price
+
+```
+SELECT UnitsSold.product_id, 
+       ROUND((SUM(units*price)/ SUM(units)),2) AS average_price
+FROM UnitsSold
+JOIN Prices ON Prices.product_id = UnitsSold.product_id
+           AND UnitsSold.purchase_date  BETWEEN start_date AND end_date
+GROUP BY product_id
+```
 ### 1285. Find the Start and End Number of Continuous Ranges
 
 ```
@@ -389,4 +434,16 @@ JOIN Person on Person.id = temp.user
 JOIN Country on left(Person.phone_number,3) = Country.country_code
 GROUP BY Country.name
 HAVING avg(duration) >  (SELECT AVG(duration) FROM Calls) 
+```
+### 1965. Employees With Missing Information
+
+```
+WITH cte as 
+            (SELECT employee_id FROM Employees
+            UNION SELECT employee_id FROM Salaries)
+SELECT employee_id FROM cte
+LEFT JOIN Employees USING (employee_id)
+LEFT JOIN Salaries USING (employee_id)
+WHERE name IS NULL OR salary IS NULL
+ORDER BY employee_id
 ```
