@@ -325,6 +325,20 @@ FROM Project
 JOIN Employee USING (employee_id)
 GROUP BY project_id
 ```
+### 1076. Project Employees II
+```
+SELECT project_id 
+FROM Project
+GROUP BY project_id
+HAVING COUNT(employee_id) = (
+                                SELECT COUNT(employee_id)
+                                FROM Project
+                                GROUP BY project_id
+                                ORDER BY COUNT(employee_id) DESC
+                                LIMIT 1
+                             )
+```
+
 ### 1082. Sales Analysis I
 
 ```
