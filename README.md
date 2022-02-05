@@ -386,6 +386,23 @@ FROM
     LEFT JOIN Activity b ON a.player_id = b.player_id AND a.event_date +1 = b.event_date
     GROUP BY a.event_date
 ```
+###
+```
+WITH cte1 AS
+        (SELECT * ,sum(quantity) AS qty
+        FROM Orders 
+        WHERE dispatch_date > '2018-06-23'
+        GROUP BY book_id
+         )
+        ,
+     cte2 AS 
+        ( SELECT * FROM Books WHERE available_from < '2019-05-23'
+        )
+SELECT cte2.book_id,name
+FROM cte2 
+LEFT JOIN cte1 USING (book_id)
+WHERE qty < 10 OR qty IS NULL
+```
 
 ### 1179. Reformat Department Table
 
