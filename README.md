@@ -452,6 +452,58 @@ SELECT employee_id,
        COUNT(team_id) OVER(PARTITION BY team_id )AS team_size
 FROM Employee
 ```
+### 1384. Total Sales Amount by Year
+
+```
+# start-> end
+# 2018 -> 2018- We don't care (2018,2019,2020)
+
+# 2019 -> 2018-2019
+# 2019 -> 2019- We don't care(2019,2020)
+
+
+# 2020 -> 2018-2020
+# 2020 -> 2019-2020
+# 2020 -> 2020- We don't care (2020)
+
+
+WITH cte AS
+        (
+        SELECT *, "2018" AS report_year,
+            CASE 
+                 WHEN YEAR(period_start) = '2018' 
+                 THEN (DATEDIFF(LEAST(period_end,"2018-12-31"),period_start)+1)*average_daily_sales
+                 END AS total_amount
+        FROM Sales
+        UNION ALL 
+                SELECT *, "2019" AS report_year,
+            CASE 
+                 WHEN YEAR(period_start) = '2019' 
+                 THEN (DATEDIFF(LEAST(period_end,"2019-12-31"),period_start)+1)*average_daily_sales
+                 WHEN YEAR(period_start) = '2018' AND YEAR(period_end) >= '2019'
+                 THEN (DATEDIFF(LEAST(period_end,"2019-12-31"),"2019-01-01")+1)*average_daily_sales
+                 
+                 END AS total_amount
+        FROM Sales
+        UNION ALL 
+                SELECT *, "2020" AS report_year,
+            CASE 
+                 WHEN YEAR(period_start) = '2020'
+                 THEN (DATEDIFF(LEAST(period_end,"2020-12-31"),period_start)+1)*average_daily_sales
+                 WHEN YEAR(period_start) = '2018' AND YEAR(period_end) = '2020'
+                 THEN (DATEDIFF(period_end,"2020-01-01")+1)*average_daily_sales
+                 WHEN YEAR(period_start) = '2019' AND YEAR(period_end) = '2020'
+                 THEN (DATEDIFF(period_end,"2020-01-01")+1)*average_daily_sales
+                 END AS total_amount
+        FROM Sales
+            
+        )
+SELECT product_id,product_name,report_year,total_amount 
+FROM cte 
+JOIN Product USING (product_id)
+WHERE total_amount IS NOT NULL
+ORDER BY product_id, report_year
+```
 ### 1501. Countries You Can Safely Invest In
 
 ```
