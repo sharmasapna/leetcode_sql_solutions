@@ -518,6 +518,28 @@ JOIN Country on left(Person.phone_number,3) = Country.country_code
 GROUP BY Country.name
 HAVING avg(duration) >  (SELECT AVG(duration) FROM Calls) 
 ```
+
+### 1709. Biggest Window Between Visits
+
+```
+with cte1 AS (
+        WITH cte AS (
+                    SELECT DISTINCT user_id,
+                           "2021-1-1" AS visit_date 
+                    FROM UserVisits
+                    UNION ALL
+                    SELECT * FROM UserVisits
+                    
+                    )
+        SELECT *,
+              ROW_NUMBER() OVER (ORDER BY user_id,visit_date) AS rn
+        FROM cte
+)
+SELECT c1.user_id, MAX(DATEDIFF(c2.visit_date,c1.visit_date)) AS biggest_window
+FROM cte1 c1
+JOIN cte1 c2 ON c1.user_id = c2.user_id AND c2.rn = c1.rn + 1
+GROUP BY user_id
+```
 ### 1965. Employees With Missing Information
 
 ```
