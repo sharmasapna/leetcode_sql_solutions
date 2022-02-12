@@ -369,6 +369,16 @@ WITH S8 AS (
 SELECT buyer_id  FROM S8
 WHERE buyer_id NOT IN (SELECT buyer_id FROM iPhone)
 ```
+### 1084. Sales Analysis III
+```
+SELECT product_id,product_name
+FROM Sales 
+JOIN Product USING(product_id)
+GROUP BY product_id
+HAVING
+MIN(sale_date)  >= "2019-01-01" 
+AND MAX(sale_date) < "2019-03-31"   
+```
 
 ### 1097. Game Play Analysis V
 First we want to find the min date any player logged.  
