@@ -338,6 +338,16 @@ HAVING COUNT(employee_id) = (
                                 LIMIT 1
                              )
 ```
+### 1077. Project Employees III
+```
+SELECT project_id,employee_id
+FROM
+(SELECT project_id,employee_id,experience_years,
+       DENSE_RANK() OVER(PARTITION BY project_id ORDER BY experience_years DESC) AS rnk
+FROM Project
+JOIN Employee USING (employee_id)) tmp
+WHERE rnk = 1
+```
 
 ### 1082. Sales Analysis I
 
