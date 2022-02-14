@@ -562,3 +562,13 @@ LEFT JOIN Salaries USING (employee_id)
 WHERE name IS NULL OR salary IS NULL
 ORDER BY employee_id
 ```
+### 2020. Number of Accounts That Did Not Stream
+```
+WITH cte AS 
+    (SELECT account_id FROM Subscriptions
+    WHERE YEAR(start_date) = '2021' OR YEAR(end_date) = '2021')
+SELECT COUNT(account_id) AS accounts_count
+FROM cte
+LEFT JOIN Streams USING (account_id)
+WHERE YEAR(stream_date) != '2021'
+```
