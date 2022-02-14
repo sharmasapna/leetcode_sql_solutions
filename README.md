@@ -286,6 +286,21 @@ SELECT id,
 FROM Tree
 ORDER BY id
 ```
+### 614. Second Degree Follower
+```
+WITH cte AS 
+(SELECT followee, COUNT(follower) AS num
+ FROM Follow
+ GROUP BY followee),
+cte1 AS 
+(SELECT DISTINCT followee FROM Follow
+ WHERE followee IN (SELECT DISTINCT follower FROM Follow))
+
+SELECT followee AS follower,num FROM cte1
+JOIN cte USING (followee)
+ORDER BY  followee
+
+```
 ### 1068. Product Sales Analysis I
 ```
 SELECT product_name, 
