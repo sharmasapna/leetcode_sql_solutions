@@ -438,6 +438,14 @@ FROM cte2
 LEFT JOIN cte1 USING (book_id)
 WHERE qty < 10 OR qty IS NULL
 ```
+### 1113. Reported Posts
+```
+SELECT extra AS report_reason,
+       COUNT(DISTINCT post_id) AS report_count
+FROM Actions 
+WHERE Actions.action = 'report' AND  action_date = '2019-07-04'
+GROUP BY extra
+```
 
 ### 1179. Reformat Department Table
 
