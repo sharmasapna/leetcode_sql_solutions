@@ -455,6 +455,14 @@ WHERE datediff('2019-07-27', activity_date) <30
 GROUP BY activity_date
 ```
 
+### 1142. User Activity for the Past 30 Days II
+```
+SELECT IFNULL(ROUND(COUNT(DISTINCT session_id)/COUNT(DISTINCT user_id), 2),  0.00) 
+AS average_sessions_per_user
+FROM Activity 
+WHERE datediff('2019-07-27', activity_date) <30 
+```
+
 ### 1179. Reformat Department Table
 
 ```
