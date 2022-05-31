@@ -158,6 +158,14 @@ FROM
     ) temp
 WHERE rnk <4
 ```
+### 196. Delete Duplicate Emails
+```
+DELETE FROM Person
+WHERE id NOT IN 
+    (SELECT * FROM 
+      (SELECT  MIN(id) FROM Person GROUP BY Email) AS t 
+     )
+```
 ### 197. Rising Temperature
 
 ```
